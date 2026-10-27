@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "894599420887",
+    "project_id": "shopping-list-team48",
+    "storage_bucket": "shopping-list-team48.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894599420887:android:fdc54d0c7a19708be4c992",
+        "android_client_info": {
+          "package_name": "au.edu.canberra.team48.shoppinglist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClnLLrcInKUXp5AWrMQKfCItqPKGyRVpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

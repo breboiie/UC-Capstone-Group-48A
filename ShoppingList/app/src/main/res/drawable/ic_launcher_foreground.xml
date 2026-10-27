@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive icon foreground: white basket and amber tick badge, from logo.svg.
+     Everything sits inside the 66dp safe zone so no launcher mask can clip it. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- handle -->
+    <path android:pathData="M37,48 C37,31 71,31 71,48"
+        android:strokeColor="#FFFFFFFF" android:strokeWidth="5" android:strokeLineCap="round"/>
+    <!-- rim -->
+    <path android:fillColor="#FFFFFFFF"
+        android:pathData="M30,47 H78 A3.5,3.5 0 0 1 78,54 H30 A3.5,3.5 0 0 1 30,47 Z"/>
+    <!-- body -->
+    <path android:fillColor="#FFFFFFFF"
+        android:pathData="M32.2,56 H75.8 L72.3,74.6 Q71.7,78 68.4,78 H39.6 Q36.3,78 35.7,74.6 Z"/>
+    <!-- slats -->
+    <path android:pathData="M44,60.5 V73.5 M54,60.5 V73.5 M64,60.5 V73.5"
+        android:strokeColor="#FF26543D" android:strokeWidth="3.4" android:strokeLineCap="round"/>
+    <!-- tick badge -->
+    <path android:fillColor="#FFF2B84B"
+        android:pathData="M60,38 A10,10 0 1 1 80,38 A10,10 0 1 1 60,38 Z"/>
+    <path android:pathData="M65,38.3 L68.6,41.8 L75.2,34.6"
+        android:strokeColor="#FF1B3E2C" android:strokeWidth="3.2"
+        android:strokeLineCap="round" android:strokeLineJoin="round"/>
+</vector>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Where the camera app may write the photo it takes for us, and where kept item photos live. -->
+<paths>
+    <cache-path name="captures" path="captures/"/>
+    <files-path name="photos" path="photos/"/>
+</paths>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="paper">#FFEEF7FD</color>
+    <color name="paper_dark">#FF0A1520</color>
+    <color name="sky">#FF0369A1</color>
+    <color name="ic_launcher_background">#FF42AAFA</color>
+</resources>

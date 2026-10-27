@@ -1,0 +1,90 @@
+rules_version = '2';
+
+// Security rules for the Team 48 shopping list.
+// Paste into Firebase console > Firestore Database > Rules, then Publish.
+//
+// Model: every phone signs in anonymously. A household holds one list and the
+// anonymous IDs of the phones sharing it. A phone joins by quoting a live
+// six-digit pairing code that points at that household. No Cloud Functions are
+// needed, so the free Spark plan is enough.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function household(hid) {
+      return get(/databases/$(database)/documents/households/$(hid)).data;
+    }
+
+    function isMember(hid) {
+      return signedIn() && request.auth.uid in household(hid).memberUids;
+    }
+
+    match /households/{hid} {
+      // Only phones already sharing the list can see it. Nobody can list households.
+      allow get: if signedIn() && request.auth.uid in resource.data.memberUids;
+      allow list: if false;
+
+      // A phone creates its own household with only itself in it.
+      allow create: if signedIn()
+        && request.resource.data.memberUids == [request.auth.uid]
+        && request.resource.data.keys().hasOnly(['memberUids', 'memberNames', 'createdAt']);
+
+      allow update: if signedIn() && (memberEdit() || joining());
+
+      // Existing members may rename themselves, disconnect phones and set how many days
+      // Bought before keeps things (1 to 60). They can never add a phone.
+      function memberEdit() {
+        return request.auth.uid in resource.data.memberUids
+          && request.resource.data.memberUids.toSet().difference(resource.data.memberUids.toSet()).size() == 0
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberUids', 'memberNames', 'keepBoughtDays'])
+          && (!('keepBoughtDays' in request.resource.data)
+              || (request.resource.data.keepBoughtDays is int
+                  && request.resource.data.keepBoughtDays >= 1
+                  && request.resource.data.keepBoughtDays <= 60));
+      }
+
+      // A new phone may add only itself, only with a live code for this household,
+      // and only while there is room.
+      function joining() {
+        let code = request.resource.data.joinCode;
+        let pairing = get(/databases/$(database)/documents/pairing/$(code)).data;
+        return !(request.auth.uid in resource.data.memberUids)
+          && request.resource.data.memberUids.toSet() == resource.data.memberUids.toSet().union([request.auth.uid].toSet())
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberUids', 'memberNames', 'joinCode'])
+          && request.resource.data.memberNames.diff(resource.data.memberNames).affectedKeys().hasOnly([request.auth.uid])
+          && pairing.householdId == hid
+          && pairing.expiresAt > request.time
+          && resource.data.memberUids.size() < 5;
+      }
+
+      match /items/{itemId} {
+        allow read, write: if isMember(hid);
+      }
+    }
+
+    match /pairing/{code} {
+      // Reading one code needs the exact number. Listing codes is never allowed.
+      allow get: if signedIn();
+      allow list: if false;
+
+      // Members make codes for their own household, valid for at most eleven minutes.
+      allow create: if signedIn()
+        && isMember(request.resource.data.householdId)
+        && request.resource.data.expiresAt > request.time
+        && request.resource.data.expiresAt < request.time + duration.value(15, 'm');
+
+      // A number can be reused only once its old code has run out.
+      allow update: if signedIn()
+        && resource.data.expiresAt < request.time
+        && isMember(request.resource.data.householdId)
+        && request.resource.data.expiresAt < request.time + duration.value(15, 'm');
+
+      // Used codes are deleted by the phone that joined; members may also remove them.
+      allow delete: if signedIn() && isMember(resource.data.householdId);
+    }
+  }
+}

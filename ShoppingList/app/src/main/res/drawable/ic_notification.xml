@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status bar icon: basket silhouette, white on transparent as Android requires. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="60" android:viewportHeight="60">
+    <group android:translateX="-24" android:translateY="-24">
+        <path android:pathData="M37,48 C37,31 71,31 71,48"
+            android:strokeColor="#FFFFFFFF" android:strokeWidth="5" android:strokeLineCap="round"/>
+        <path android:fillColor="#FFFFFFFF"
+            android:pathData="M30,47 H78 A3.5,3.5 0 0 1 78,54 H30 A3.5,3.5 0 0 1 30,47 Z"/>
+        <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd"
+            android:pathData="M32.2,56 H75.8 L72.3,74.6 Q71.7,78 68.4,78 H39.6 Q36.3,78 35.7,74.6 Z
+                M42.3,60.5 H45.7 V73.5 H42.3 Z M52.3,60.5 H55.7 V73.5 H52.3 Z M62.3,60.5 H65.7 V73.5 H62.3 Z"/>
+    </group>
+</vector>
